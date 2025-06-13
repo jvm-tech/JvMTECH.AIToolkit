@@ -28,7 +28,7 @@ export default class TranslateCommand extends Command {
                         nodeContextPath: options.nodeContextPath,
                         promptVariables: {
                             targetLanguage:
-                                "${Configuration.setting('Neos.ContentRepository.contentDimensions.language.presets.' + node.context.targetDimensions.language + '.label')}",
+                                "${String.substr(Neos.Dimension.currentValue(node, 'language').value, 0, 2)}",
                             currentValue: originalContent,
                         },
                         promptTemplate: this.toolbarConfiguration.translation.promptTemplate,

@@ -5,7 +5,7 @@ use Neos\Flow\Annotations as Flow;
 use JvMTECH\AIToolkit\Traits\RequestArgumentsTrait;
 use Neos\Flow\Mvc\ActionRequest;
 use Neos\Media\Domain\Model\Asset;
-use Neos\ContentRepository\Domain\Model\NodeInterface;
+use Neos\ContentRepository\Core\Projection\ContentGraph\Node;
 use JvMTECH\AIToolkit\ModelConnectors\ModelConnectorFactory;
 use Psr\Log\LoggerInterface;
 
@@ -55,14 +55,14 @@ abstract class AbstractModelHandler implements ModelHandlerInterface
         return $prompt;
     }
 
-    protected function getNodePropertiesWithTransientValues(NodeInterface $node, array $transientValues = []): array
+    protected function getNodePropertiesWithTransientValues(Node $node, array $transientValues = []): array
     {
         $nodeProperties = [];
 
         $castValue = function ($value) use (&$castValue) {
             try {
-                if ($value instanceof NodeInterface) {
-                    return $value->getIdentifier();
+                if ($value instanceof Node) {
+                    return $value->aggregateId;
                 }
 
                 if ($value instanceof Asset) {
@@ -80,7 +80,7 @@ abstract class AbstractModelHandler implements ModelHandlerInterface
             }
         };
 
-        foreach ($node->getNodeData()->getProperties() as $propertyName => $propertyValue) {
+        foreach ($node->properties as $propertyName => $propertyValue) {
             $nodeProperties['node.properties.' . $propertyName] = $castValue($propertyValue);
         }
         foreach ($transientValues as $transientKey => $transientValue) {

@@ -3,7 +3,6 @@ namespace JvMTECH\AIToolkit\Controller;
 
 use Neos\Flow\Annotations as Flow;
 use JvMTECH\AIToolkit\Traits\ConvertToMarkdownTrait;
-use Neos\ContentRepository\Domain\Model\NodeInterface;
 use Neos\Eel\CompilingEvaluator;
 use Neos\Eel\FlowQuery\FlowQuery;
 use Neos\Eel\Utility;
@@ -11,13 +10,15 @@ use GuzzleHttp\Client;
 use JvMTECH\AIToolkit\ModelHandlers\ModelHandlerFactory;
 use JvMTECH\AIToolkit\ModelConnectors\ModelConnectorFactory;
 use JvMTECH\AIToolkit\Traits\RequestArgumentsTrait;
-use Neos\ContentRepository\Domain\Model\Node;
+use Neos\ContentRepositoryRegistry\ContentRepositoryRegistry;
+use Neos\ContentRepository\Core\Projection\ContentGraph\Node;
 use Neos\Flow\Mvc\Controller\ActionController;
 use Neos\Flow\Mvc\View\JsonView;
 use Neos\Flow\Property\Exception;
 use Neos\Flow\Property\PropertyMapper;
 use Neos\Flow\Security\Context as SecurityContext;
 use Neos\Media\Domain\Repository\AssetRepository;
+use Neos\Neos\FrontendRouting\SiteDetection\SiteDetectionResult;
 
 class GenerateController extends ActionController
 {
@@ -59,14 +60,20 @@ class GenerateController extends ActionController
      */
     protected $additionalEelDefaultContext;
 
-    public function executeAction(string $handlerName)
+    /**
+     * @Flow\Inject(lazy=false)
+     * @var ContentRepositoryRegistry
+     */
+    protected $contentRepositoryRegistry;
+
+    public function executeAction(string $handlerName = '')
     {
         // Get base variables to build eel context
 
         $node = null;
         $q = null;
         if ($this->getRequestArgument('nodeContextPath')) {
-            /** @var NodeInterface $node */
+            /** @var Node $node */
             $node = $this->getNodeWithContextPath($this->getRequestArgument('nodeContextPath'));
             $q = new FlowQuery([$node]);
         }
@@ -78,7 +85,9 @@ class GenerateController extends ActionController
 
         $documentNode = null;
         if ($node) {
-            $documentNode = $node->getNodeType()->isOfType('Neos.Neos:Document') ? $node : $q->parent('[instanceof Neos.Neos:Document]')->get(0);
+            $currentContentRepositoryId = SiteDetectionResult::fromRequest($this->request->getHttpRequest())->contentRepositoryId;
+            $currentContentRepository = $this->contentRepositoryRegistry->get($currentContentRepositoryId);
+            $documentNode = $currentContentRepository->getNodeTypeManager()->getNodeType($node->nodeTypeName)->isOfType('Neos.Neos:Document') ? $node : $q->closest('[instanceof Neos.Neos:Document]')->get(0);
         }
 
         $site = $q ? $q->parents('[instanceof Neos.Neos:Document]')->last()->get(0) : null;

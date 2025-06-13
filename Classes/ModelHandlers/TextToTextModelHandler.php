@@ -41,8 +41,8 @@ class TextToTextModelHandler extends AbstractModelHandler
 
         $logDto = LogDto::create()
             ->withAccountIdentifier($options['accountIdentifier'])
-            ->withNodeIdentifier((string)$options['node']->getNodeAggregateIdentifier())
-            ->withNodeTypeName($options['node']->getNodeType()->getName())
+            ->withNodeIdentifier((string)$options['node']->aggregateId)
+            ->withNodeTypeName($options['node']->nodeTypeName)
             ->withPropertyName('')
             ->withPrompt(new \DateTime(), $options['modelHandler'], $options['modelPreset'], $prompt, $options['currentValue'], $result, $prediction?->getInputTokens() ?? -1, $prediction?->getOutputTokens() ?? -1);
 

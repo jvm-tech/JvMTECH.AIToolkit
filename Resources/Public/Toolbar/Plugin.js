@@ -262,7 +262,7 @@
               body: JSON.stringify({
                 nodeContextPath: options.nodeContextPath,
                 promptVariables: {
-                  targetLanguage: "${Configuration.setting('Neos.ContentRepository.contentDimensions.language.presets.' + node.context.targetDimensions.language + '.label')}",
+                  targetLanguage: "${String.substr(Neos.Dimension.currentValue(node, 'language').value, 0, 2)}",
                   currentValue: originalContent
                 },
                 promptTemplate: this.toolbarConfiguration.translation.promptTemplate,

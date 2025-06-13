@@ -1,3 +1,4 @@
 JvMTECH:
   AIToolkit:
-    additionalDefaultEelContext: []
+    additionalDefaultEelContext:
+      Neos.Dimension: Neos\Neos\Fusion\Helper\DimensionHelper
