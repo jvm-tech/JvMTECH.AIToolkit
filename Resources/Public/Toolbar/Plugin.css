@@ -1,0 +1,26 @@
+/* Toolbar/CKEditor/TranslateButton.module.css */
+.aitoolkit-toolbar {
+  position: relative;
+}
+.aitoolkit-toolbar_icon {
+  position: absolute;
+  bottom: 0;
+  right: 3px;
+  width: 10px;
+  opacity: .75;
+  pointer-events: none;
+}
+.aitoolkit-toolbar_icon svg {
+  max-width: 100%;
+}
+.aitoolkit-toolbar .neos-fa-spinner {
+  border-right: 1px solid rgba(255, 255, 255, 0.2);
+  border-left: 1px solid rgba(255, 255, 255, 0.2);
+  animation: aitoolkit-spin 2s linear infinite;
+}
+@keyframes aitoolkit-spin {
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}

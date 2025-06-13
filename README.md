@@ -3,9 +3,10 @@
 [![License](https://poser.pugx.org/jvmtech/ai-toolkit/license)](https://packagist.org/packages/jvmtech/ai-toolkit)
 
 > Foundation for easy AI integration in Neos CMS
-> Extensible and ready to go with SEO Meta-Description and Image Alt-Text generation Mixins
+> Extensible and ready to go with SEO Meta-Description, Image Alt-Text generation Mixins and In-Place text translation
 
 - Easy AI text generation configuration on properties in NodeType YAML files
+- One-Click text translation in In-Place Editor
 - Full control over prompts
 - Easily extensible with custom AI model-handlers and -connectors
 - Suitable for all properties with inspector editors of type TextFieldEditor and TextAreaEditor
@@ -129,6 +130,14 @@ This way we have full flexibility and control over the AI model and the data we 
             promptTemplate: |
               You are creating content for an accessible website.
               Describe the content of the attached image in a {targetLanguage} short sentence.
+```
+
+### Disabling In-Place Translation
+```yaml
+JvMTECH:
+  AIToolkit:
+    Toolbar:
+      translation: ~
 ```
 
 ## Extensibility

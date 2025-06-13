@@ -35,3 +35,20 @@ if (isWatch) {
 } else {
     esbuild.build(optionsTextAreaEditor);
 }
+
+/** @type {import("esbuild").BuildOptions} */
+const optionsToolbar = {
+    logLevel: "info",
+    bundle: true,
+    target: "es2020",
+    entryPoints: { Plugin: "Toolbar/index.js" },
+    loader: { ".js": "tsx" },
+    outdir: "../../Public/Toolbar",
+    alias: extensibilityMap,
+};
+
+if (isWatch) {
+    esbuild.context(optionsToolbar).then((ctx) => ctx.watch());
+} else {
+    esbuild.build(optionsToolbar);
+}

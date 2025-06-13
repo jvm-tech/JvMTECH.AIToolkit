@@ -1,0 +1,11 @@
+JvMTECH:
+  AIToolkit:
+    Toolbar:
+      translation:
+        modelHandler: "textToText"
+        modelPreset: "openai-standard"
+        promptTemplate: |
+          Translate the following text to the target language '{targetLanguage}'.
+          IMPORTANT: Make sure that the HTML structure remains intact.
+          ---
+          {currentValue}

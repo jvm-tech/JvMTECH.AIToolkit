@@ -7,6 +7,13 @@ Neos:
             resource: resource://JvMTECH.AIToolkit/Public/TextFieldEditor/Plugin.js
           'JvMTECH.AIToolkit:TextAreaEditor':
             resource: resource://JvMTECH.AIToolkit/Public/TextAreaEditor/Plugin.js
+          'JvMTECH.AIToolkit:Toolbar':
+            resource: resource://JvMTECH.AIToolkit/Public/Toolbar/Plugin.js
+        stylesheets:
+          'JvMTECH.AIToolkit:Toolbar':
+            resource: resource://JvMTECH.AIToolkit/Public/Toolbar/Plugin.css
+      frontendConfiguration:
+        'JvMTECH.AIToolkit:Toolbar': '${Configuration.setting(''JvMTECH.AIToolkit.Toolbar'')}'
     fusion:
       autoInclude:
         JvMTECH.AIToolkit: true
