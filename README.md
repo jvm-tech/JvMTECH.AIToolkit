@@ -11,6 +11,10 @@
 - Easily extensible with custom AI model-handlers and -connectors
 - Suitable for all properties with inspector editors of type TextFieldEditor and TextAreaEditor
 
+| SEO Text Generation | In-Place Text Translation |
+|---------------------|---------------------------|
+| [![SEO Text Generation](Documentation/jvmtech-aitoolkit-seo-text-generation-square.gif)](Documentation/jvmtech-aitoolkit-seo-text-generation.webm) | [![In-Place Text Translation](Documentation/jvmtech-aitoolkit-inplace-text-translation-square.gif)](Documentation/jvmtech-aitoolkit-inplace-text-translation.webm) |
+
 ## Installation
 
 ```
