@@ -2,3 +2,5 @@ JvMTECH:
   AIToolkit:
     backendRequest:
       auth: []
+      # auth: ['username', 'password'] # defaults to "basic"
+      # auth: ['username', 'password', 'digest'] # basic, digest, ntlm, ..

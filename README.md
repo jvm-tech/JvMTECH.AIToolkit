@@ -186,6 +186,30 @@ JvMTECH:
         # ... optional configuration
 ```
 
+## Tips & Tricks
+
+<details>
+  <summary>My Neos Backend is behind an additional Basic-Auth and I think this causes problems.</summary>
+  You are right. In this situation you need to configure the credentials that AI Toolkit is able to load document content.
+  ```yaml
+  JvMTECH:
+    AIToolkit:
+      backendRequest:
+        auth: ['username', 'password', <'basic'>]
+  ```
+</details>
+
+<details>
+  <summary>I get a maximum context length error message.</summary>
+  You have two main options to resolve the maximum context length error:
+
+  a) Use a model with a larger context window - Switch to a model that can handle more tokens/text at once. Different models have different context limits, so upgrading to one with a higher capacity will allow you to process longer inputs.
+
+  b) Manually reduce the variables in your prompt - Trim down your input by removing unnecessary text, shortening examples, or breaking your task into smaller chunks that fit within the current model's limits.
+  
+  The first option gives you more capacity, while the second requires optimizing what you're sending to fit the constraints.
+</details>
+
 ## Background
 
 The Neos AI-Toolkit package is completely free and can be tailored to your needs.
