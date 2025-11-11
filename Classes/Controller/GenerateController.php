@@ -182,13 +182,6 @@ class GenerateController extends ActionController
 
         $html = $response->getBody()->getContents();
 
-        // remove everything in <nav> and <header>
-        $html = preg_replace('/<nav.*<\/nav>/s', '', $html);
-        // remove last <footer> and everything after it
-        $html = preg_replace('/<footer>.*<\/footer>/s', '', $html);
-        // remove <form> and everything in it
-        $html = preg_replace('/<form.*<\/form>/s', '', $html);
-
         return $html;
     }
 
