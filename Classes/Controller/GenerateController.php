@@ -7,6 +7,8 @@ use Neos\Eel\CompilingEvaluator;
 use Neos\Eel\FlowQuery\FlowQuery;
 use Neos\Eel\Utility;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ConnectException;
+use GuzzleHttp\Exception\RequestException;
 use JvMTECH\AIToolkit\ModelHandlers\ModelHandlerFactory;
 use JvMTECH\AIToolkit\ModelConnectors\ModelConnectorFactory;
 use JvMTECH\AIToolkit\Traits\RequestArgumentsTrait;
@@ -170,28 +172,76 @@ class GenerateController extends ActionController
     }
 
     /**
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * Fetch document HTML with error handling
+     *
+     * @param string $url The URL to fetch
+     * @param array $cookies Cookies to send with the request
+     * @return string The HTML content, or empty string on error
      */
     protected function fetchDocumentHtml($url, $cookies): string
     {
-        $client = new Client(
-            array_merge(
-                [
-                    'cookies' => true
-                ],
-                $this->configuration['backendRequest']['auth'] ? ['auth' => $this->configuration['backendRequest']['auth']] : []
-            )
-        );
+        try {
+            $client = new Client(
+                array_merge(
+                    [
+                        'cookies' => true,
+                        'timeout' => 30,
+                        'connect_timeout' => 10,
+                        'http_errors' => false, // Don't throw exceptions on 4xx/5xx responses
+                    ],
+                    $this->configuration['backendRequest']['auth'] ? ['auth' => $this->configuration['backendRequest']['auth']] : []
+                )
+            );
 
-        $response = $client->get($url, [
-            'headers' => [
-                'Cookie' => implode('; ', array_map(fn($key, $value) => "$key=$value", array_keys($cookies), $cookies)),
-            ]
-        ]);
+            $response = $client->get($url, [
+                'headers' => [
+                    'Cookie' => implode('; ', array_map(fn($key, $value) => "$key=$value", array_keys($cookies), $cookies)),
+                ]
+            ]);
 
-        $html = $response->getBody()->getContents();
+            $statusCode = $response->getStatusCode();
 
-        return $html;
+            // Only return content for successful responses (2xx)
+            if ($statusCode >= 200 && $statusCode < 300) {
+                return $response->getBody()->getContents();
+            }
+
+            // Log non-success responses
+            $this->logger->warning(sprintf(
+                'AI Toolkit: Failed to fetch document HTML - HTTP %d from %s',
+                $statusCode,
+                $url
+            ));
+
+            return '';
+
+        } catch (ConnectException $e) {
+            // Connection errors (DNS failure, timeout, connection refused, etc.)
+            $this->logger->error(sprintf(
+                'AI Toolkit: Connection error fetching document HTML from %s: %s',
+                $url,
+                $e->getMessage()
+            ));
+            return '';
+
+        } catch (RequestException $e) {
+            // Other HTTP request errors
+            $this->logger->error(sprintf(
+                'AI Toolkit: Request error fetching document HTML from %s: %s',
+                $url,
+                $e->getMessage()
+            ));
+            return '';
+
+        } catch (\Exception $e) {
+            // Catch any other unexpected errors
+            $this->logger->error(sprintf(
+                'AI Toolkit: Unexpected error fetching document HTML from %s: %s',
+                $url,
+                $e->getMessage()
+            ));
+            return '';
+        }
     }
 
     /**
