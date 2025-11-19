@@ -1,9 +1,11 @@
 export default class Helpers {
     static getDocumentContentUrl = (location, nodeContextPath) => {
+        const port = location.port ? `:${location.port}` : '';
         return (
             location.protocol +
             "//" +
             location.hostname +
+            port +
             "/ai-toolkit/page/renderPreviewPage?node=" +
             encodeURIComponent(nodeContextPath)
         );
