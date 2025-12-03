@@ -2,6 +2,7 @@
 namespace JvMTECH\AIToolkit\ModelHandlers;
 
 use JvMTECH\AIToolkit\Logger\LogDto;
+use Neos\ContentRepository\Core\Projection\ContentGraph\Node;
 use Neos\Flow\Annotations as Flow;
 
 class TextToTextModelHandler extends AbstractModelHandler
@@ -41,8 +42,8 @@ class TextToTextModelHandler extends AbstractModelHandler
 
         $logDto = LogDto::create()
             ->withAccountIdentifier($options['accountIdentifier'])
-            ->withNodeIdentifier((string)$options['node']->aggregateId)
-            ->withNodeTypeName($options['node']->nodeTypeName)
+            ->withNodeIdentifier($options['node']->aggregateId->value)
+            ->withNodeTypeName($options['node']->nodeTypeName->value)
             ->withPropertyName('')
             ->withPrompt(new \DateTime(), $options['modelHandler'], $options['modelPreset'], $prompt, $options['currentValue'], $result, $prediction?->getInputTokens() ?? -1, $prediction?->getOutputTokens() ?? -1);
 

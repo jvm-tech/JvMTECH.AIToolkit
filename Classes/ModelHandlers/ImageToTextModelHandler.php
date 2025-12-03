@@ -41,8 +41,8 @@ class ImageToTextModelHandler extends AbstractModelHandler
 
         $logDto = LogDto::create()
             ->withAccountIdentifier($options['accountIdentifier'])
-            ->withNodeIdentifier((string)$options['node']->aggregateId)
-            ->withNodeTypeName($options['node']->nodeTypeName)
+            ->withNodeIdentifier($options['node']->aggregateId->value)
+            ->withNodeTypeName($options['node']->nodeTypeName->value)
             ->withPropertyName('')
             ->withCustomValue('assetIdentifier', $this->promptVariables['asset']->getIdentifier())
             ->withPrompt(new \DateTime(), $options['modelHandler'], $options['modelPreset'], $prompt, $options['currentValue'], $result, $prediction?->getInputTokens() ?? -1, $prediction?->getOutputTokens() ?? -1);
