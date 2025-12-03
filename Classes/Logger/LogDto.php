@@ -18,9 +18,9 @@ class LogDto
         return $this;
     }
 
-    public function withNodeIdentifier(string $nodeIdentifier): LogDto
+    public function withNodeAggregateId(string $nodeAggregateId): LogDto
     {
-        $this->metaData['nodeIdentifier'] = $nodeIdentifier;
+        $this->metaData['nodeIdentifier'] = $nodeAggregateId;
 
         return $this;
     }

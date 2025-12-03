@@ -1,7 +1,6 @@
 <?php
 namespace JvMTECH\AIToolkit\ModelHandlers;
 
-use Neos\Flow\Annotations as Flow;
 use JvMTECH\AIToolkit\Traits\RequestArgumentsTrait;
 use Neos\Flow\Mvc\ActionRequest;
 use Neos\Media\Domain\Model\Asset;
@@ -50,7 +49,7 @@ abstract class AbstractModelHandler implements ModelHandlerInterface
             $prompt = str_replace('{' . $key . '}', is_string($value) ? $value : '', $prompt);
         }
 
-        $prompt = preg_replace('/\{.*?\}/', '', $prompt);
+        $prompt = preg_replace('/\{.*?}/', '', $prompt);
 
         return $prompt;
     }
@@ -122,7 +121,7 @@ abstract class AbstractModelHandler implements ModelHandlerInterface
                     }
                 }
             }
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             // ignore, just return the input result value
         }
 

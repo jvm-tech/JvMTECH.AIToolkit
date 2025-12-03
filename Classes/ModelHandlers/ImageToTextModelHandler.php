@@ -1,7 +1,7 @@
 <?php
 namespace JvMTECH\AIToolkit\ModelHandlers;
 
-use Neos\Flow\Annotations as Flow;
+use Neos\ContentRepository\Core\Projection\ContentGraph\Node;
 use JvMTECH\AIToolkit\Logger\LogDto;
 
 class ImageToTextModelHandler extends AbstractModelHandler
@@ -22,6 +22,7 @@ class ImageToTextModelHandler extends AbstractModelHandler
             'debug' => false,
         ]);
 
+        /** @var array{ node: Node } $options */
         $options = array_merge($this->defaultOptions, $requestOptions, $this->overrideOptions);
 
         $prompt = $this->buildPrompt($options['promptTemplate'], array_merge(
@@ -41,9 +42,8 @@ class ImageToTextModelHandler extends AbstractModelHandler
 
         $logDto = LogDto::create()
             ->withAccountIdentifier($options['accountIdentifier'])
-            ->withNodeIdentifier($options['node']->aggregateId->value)
+            ->withNodeAggregateId($options['node']->aggregateId->value)
             ->withNodeTypeName($options['node']->nodeTypeName->value)
-            ->withPropertyName('')
             ->withCustomValue('assetIdentifier', $this->promptVariables['asset']->getIdentifier())
             ->withPrompt(new \DateTime(), $options['modelHandler'], $options['modelPreset'], $prompt, $options['currentValue'], $result, $prediction?->getInputTokens() ?? -1, $prediction?->getOutputTokens() ?? -1);
 
