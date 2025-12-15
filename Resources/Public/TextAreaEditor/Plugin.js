@@ -538,7 +538,8 @@
       Helpers = class {
       };
       Helpers.getDocumentContentUrl = (location, nodeContextPath) => {
-        return location.protocol + "//" + location.hostname + "/ai-toolkit/page/renderPreviewPage?node=" + encodeURIComponent(nodeContextPath);
+        const port = location.port ? `:${location.port}` : '';
+        return location.protocol + "//" + location.hostname + port + "/ai-toolkit/page/renderPreviewPage?node=" + encodeURIComponent(nodeContextPath);
       };
       Helpers.getDocumentContent = async (documentContentUrl) => {
         return await fetch(documentContentUrl).then((response) => {
